@@ -293,12 +293,14 @@ function drawPixel(imagedata,x,y,color) {
 } // end drawPixel
 
 // rotate a point around the Y (vertical) axis by angle theta
-function rotateY(x, z, theta) {
+function rotateY(x, z, theta, cx=0, cz=0) {
+    var dx = x - cx;
+    var dz = z - cz;
     return {
-        x: x * Math.cos(theta) + z * Math.sin(theta),
-        z: -x * Math.sin(theta) + z * Math.cos(theta)
+        x: cx + dx * Math.cos(theta) + dz * Math.sin(theta),
+        z: cz - dx * Math.sin(theta) + dz * Math.cos(theta)
     };
-}
+} // end rotateY
 
 /* application functions */
 
@@ -526,10 +528,13 @@ function main() {
     var view = {eye:testEye, at:testAt, up:new Vector(0,1,0)};
     var theta = -30 * Math.PI / 180; // negative angle swings left side toward the eye
 
-    var tl = rotateY(-5, 10, theta); // top-left
-    var tr = rotateY( 5, 10, theta); // top-right
-    var br = rotateY( 5, 10, theta); // bottom-right
-    var bl = rotateY(-5, 10, theta); // bottom-left
+    var theta = -30 * Math.PI / 180;
+    var cx = 0, cz = 10; // center of the square, used as rotation pivot
+
+    var tl = rotateY(-5, 10, theta, cx, cz);
+    var tr = rotateY( 5, 10, theta, cx, cz);
+    var br = rotateY( 5, 10, theta, cx, cz);
+    var bl = rotateY(-5, 10, theta, cx, cz);
 
     var poly = [
         {x: tl.x, y:  5, z: tl.z, c: new Color(255,0,0,255)},   // top-left: red
