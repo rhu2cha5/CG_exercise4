@@ -292,6 +292,13 @@ function drawPixel(imagedata,x,y,color) {
     }
 } // end drawPixel
 
+// rotate a point around the Y (vertical) axis by angle theta
+function rotateY(x, z, theta) {
+    return {
+        x: x * Math.cos(theta) + z * Math.sin(theta),
+        z: -x * Math.sin(theta) + z * Math.cos(theta)
+    };
+}
 
 /* application functions */
 
@@ -517,11 +524,19 @@ function main() {
     var testEye = new Vector(0,0,0);
     var testAt = Vector.subtract(new Vector(0,0,10),testEye);
     var view = {eye:testEye, at:testAt, up:new Vector(0,1,0)};
-    var d = 7.07; // ≈ 5*sqrt(2), keeps the same "radius" as the original square's corners
-    var poly = [{x:0,   y:d,   z:10, c:new Color(0,255,0,255)},   // top:   green
-                {x:d,   y:0,   z:10, c:new Color(255,0,0,255)},   // right: red
-                {x:0,   y:-d,  z:10, c:new Color(0,0,255,255)},   // bottom: blue
-                {x:-d,  y:0,   z:10, c:new Color(0,0,0,255)}];    // left:  black
+    var theta = -30 * Math.PI / 180; // negative angle swings left side toward the eye
+
+    var tl = rotateY(-5, 10, theta); // top-left
+    var tr = rotateY( 5, 10, theta); // top-right
+    var br = rotateY( 5, 10, theta); // bottom-right
+    var bl = rotateY(-5, 10, theta); // bottom-left
+
+    var poly = [
+        {x: tl.x, y:  5, z: tl.z, c: new Color(255,0,0,255)},   // top-left: red
+        {x: tr.x, y:  5, z: tr.z, c: new Color(0,255,0,255)},   // top-right: green
+        {x: br.x, y: -5, z: br.z, c: new Color(0,0,0,255)},     // bottom-right: black
+        {x: bl.x, y: -5, z: bl.z, c: new Color(0,0,255,255)}    // bottom-left: blue
+    ];
     
     // Define and render a rectangle in 2D with colors and coords at corners
     projectPoly(imagedata,poly,view);
