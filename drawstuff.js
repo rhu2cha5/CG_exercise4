@@ -517,8 +517,11 @@ function main() {
     var testEye = new Vector(0,0,0);
     var testAt = Vector.subtract(new Vector(0,0,10),testEye);
     var view = {eye:testEye, at:testAt, up:new Vector(0,1,0)};
-    var poly = [{x:-5,y:5,z:10,c:new Color(255,0,0,255)}, {x:5,y:5,z:10,c:new Color(0,255,0,255)}, 
-                {x:5,y:-5,z:10,c:new Color(0,0,0,255)}, {x:-5,y:-5,z:10,c:new Color(0,0,255,255)}];
+    var d = 7.07; // ≈ 5*sqrt(2), keeps the same "radius" as the original square's corners
+    var poly = [{x:0,   y:d,   z:10, c:new Color(0,255,0,255)},   // top:   green
+                {x:d,   y:0,   z:10, c:new Color(255,0,0,255)},   // right: red
+                {x:0,   y:-d,  z:10, c:new Color(0,0,255,255)},   // bottom: blue
+                {x:-d,  y:0,   z:10, c:new Color(0,0,0,255)}];    // left:  black
     
     // Define and render a rectangle in 2D with colors and coords at corners
     projectPoly(imagedata,poly,view);
